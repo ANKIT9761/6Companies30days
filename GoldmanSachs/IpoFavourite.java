@@ -49,3 +49,32 @@ class Solution {
         }
     }
 }
+
+// Single Heap approach-
+
+class Solution {
+    public int findMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        int[][] pc = new int[profits.length][2];
+        for(int i = 0; i < profits.length; i++){
+            pc[i][0] = profits[i];
+            pc[i][1] = capital[i];
+        }
+        Arrays.sort(pc, (a, b) -> Integer.compare(a[1], b[1]));
+        int l = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<Integer>(pc.length, Collections.reverseOrder());
+        while(k > 0){
+            for(int i = l; i < pc.length; i++){
+                if(i + 1 == pc.length) l = i + 1;
+                if(pc[i][1] > w){
+                    l = i;
+                    break;
+                }
+                else pq.offer(pc[i][0]);
+            }
+            if(pq.size() == 0) return w;
+            w += pq.poll();
+            k--;
+        }
+        return w;
+    }
+}
